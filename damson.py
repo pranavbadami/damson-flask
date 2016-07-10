@@ -18,8 +18,8 @@ def connect():
     if request.method == 'POST' and form.validate():
     	print form.ssid.data, form.password.data
         # call here
-        connected = False
-    	return render_template('connect.html', form=form, connected=connected, failed=True)
+        connected = True
+    	return render_template('connect.html', form=form, connected=connected)
 
 class ConnectionForm(Form):
     ssid = StringField('SSID')
