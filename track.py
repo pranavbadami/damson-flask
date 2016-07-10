@@ -139,7 +139,9 @@ if __name__ == "__main__":
     #function to add. 
     print "first user added", add_rule_user
     for rule in add_rule_user:
-        add_rule(rule)
+        rule_val = add_rule_user[rule]
+
+        add_rule(rule_val)
 
     #loop
     while(1):
@@ -154,10 +156,12 @@ if __name__ == "__main__":
         
         #TODO update the firewall
         for rule in add_rule_user:
-            add_rule(rule)
+            rule_val = add_rule_user[rule]
+            add_rule(rule_val)
 
         for rule in remove_rule_user:
-            remove_user(rule)
+            rule_val = remove_rule_user[rule]
+            remove_user(rule_val)
         print remove_rule_user, add_rule_user
         #TODO track the current array usage, and transmit to the server. 
         update_bandwidth(current)
