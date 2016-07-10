@@ -88,6 +88,9 @@ def update_bandwidth(current):
         if r.json() == 'Transaction successfully logged.':
             print "upload"
             #RESET the data on firewall
+            zero_cmd = 'iptables -Z internet -t mangle -m mac --mac-source %s' % user['mac']
+            p = subprocess.Popen(zero_cmd, shell=True)
+            
 
 
 class BashIP(threading.Thread):
