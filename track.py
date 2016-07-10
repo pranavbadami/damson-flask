@@ -13,7 +13,10 @@ payload = {'hotspot':'1'}
 serial = 'abcd'
 
 
-def update_rules(new, current):
+
+
+def update_rules():
+    global current, new
     add_rule_user = {}
     remove_rule_user = {}
 
@@ -30,9 +33,9 @@ def update_rules(new, current):
     current = new
 
     #Code to check the balance, if 0 add them to remove rule. 
-    for key, value in current.iteritems():
-        if value['balance'] <= 0:
-            remove_rule_user[key] = current[key]
+    # for key, value in current.iteritems():
+    #     if value['balance'] <= 0:
+    #         remove_rule_user[key] = current[key]
 
     return (remove_rule_user, add_rule_user)
 
@@ -109,6 +112,7 @@ class BashIP(threading.Thread):
 
 
 if __name__ == "__main__":
+
     p = subprocess.Popen('bash iptables_flush.sh', shell=True)
     p.wait()
     p = subprocess.Popen('bash init-internet-chain.sh', shell=True)
