@@ -31,7 +31,7 @@ def update_rules(new, current):
 
     #Code to check the balance, if 0 add them to remove rule. 
     for key, value in current.iteritems():
-        if value['data_remaining'] <= 0:
+        if value['balance'] <= 0:
             remove_rule_user[key] = current[key]
 
     return (remove_rule_user, add_rule_user)
@@ -58,7 +58,7 @@ def update_bandwith(current):
     output = p.stdout.read()
     ip_output = output.split('\n')
     for user in current:
-
+        user = current[user]
         i = 0
         data = ''
         for ipo in ip_output:
