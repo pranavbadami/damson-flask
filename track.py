@@ -58,6 +58,7 @@ def update_bandwidth(current):
     output = p.stdout.read()
     ip_output = output.split('\n')
     for user in current:
+        pk = user
         user = current[user]
         i = 0
         data = ''
@@ -79,7 +80,7 @@ def update_bandwidth(current):
         up_payload = {  'uuid':uuid.uuid1().bytes, 
                         'data_used' : data, 
                         'hotspot': hotspot, 
-                        'user': user
+                        'user': pk
                     }
         print "request to ", up_payload
         r = requests.post('http://damson.online/api/track', data=up_payload)
