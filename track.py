@@ -30,20 +30,22 @@ def update_rules(new, current):
     current = new
 
     #Code to check the balance, if 0 add them to remove rule. 
-    for key in current:
-        if key['data_remaining'] == 0:
+    for key, value in current.iteritems():
+        if value['data_remaining'] <= 0:
             remove_rule_user[key] = current[key]
 
     return (remove_rule_user, add_rule_user)
 
 
 def add_rule(rule):
-    subprocess.call(['iptables', '-I', 'internet', '1', '-t', 'mangle' '-m', 'mac', '--mac-source', rule['mac'], '-j', 'RETURN'],shell=True)
+    cmd = 'iptables -I internet 1 -t mangle -m mac --mac-source %s -j RETURN'
+    p = subprocess.Popen(cmd % rule['mac'], shell=True)
     print "added", rule
 
 
 def remove_rule(rule):
-    subprocess.call(['iptables', '-D', 'internet', '-t', 'mangle' '-m', 'mac', '--mac-source', rule['mac'], '-j', 'RETURN'],shell=True)
+    cmd = 'iptables -D internet -t mangle -m mac --mac-source %s -j RETURN'
+    p = subprocess.Popen(cmd % rule['mac'], shell=True)
     print "removed", rule
 
 
@@ -80,7 +82,7 @@ def update_bandwith(current):
                         'user': user
                     }
         r = requests.post('http://damson.online/api/track', data=up_payload)
-        if r.json() == 'Transaction successfully logged.'
+        if r.json() == 'Transaction successfully logged.':
             print "upload"
             #RESET the data on firewall
 
@@ -101,17 +103,24 @@ class BashIP(threading.Thread):
 
 
 if __name__ == "__main__":
-
+    p = subprocess.Popen('bash iptables_flush.sh', shell=True)
+    p.wait()
+    p = subprocess.Popen('bash init-internet-chain.sh', shell=True)
+    p.wait()
+    p = subprocess.Popen('bash mark.sh', shell=True)
+    p.wait()
+    p = subprocess.Popen('bash sharing.sh', shell=True)
+    p.wait()
     #get login url for the firewall
-    r = requests.get('http://damson.online/api/hotspots/', params = {'serial':serial})
-    if r.json():
-        login_url = 'http://damson.online/api/hotspots' + r.json()[0]['url']
-    else:
-        #TODO exit with an error that hotspot isn't registered
-        print "wrong serial"
+    # r = requests.get('http://damson.online/api/hotspots/', params = {'serial':serial})
+    # if r.json():
+    #     login_url = 'http://damson.online/api/hotspots' + r.json()[0]['url']
+    # else:
+    #     #TODO exit with an error that hotspot isn't registered
+    #     print "wrong serial"
 
-    bash_ip = BashIP(1, "bash")
-    bash_ip.start()
+    # bash_ip = BashIP(1, "bash")
+    # bash_ip.start()
 
     #get initial list and add
     add_rule_user = {}
@@ -126,6 +135,8 @@ if __name__ == "__main__":
 
     #function to add. 
     print "first user added", add_rule_user
+    for rule in add_rule_user:
+        add_rule(rule)
 
     #loop
     while(1):
