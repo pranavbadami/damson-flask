@@ -2,12 +2,13 @@ from flask import Flask
 from flask import request
 from flask import render_template
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
-from subprocess import call
+from subprocess import call, Popen
 import time
+
 app = Flask(__name__)
 
 def net_string(ssid, password):
-    base = "network={\n    ssid="+ssid+"\n    psk="+password+"\n    key_mgmt=WPA-PSK\n}"
+    base = "network={\n    ssid=\""+ssid+"\"\n    psk=\""+password+"\"\n    key_mgmt=WPA-PSK\n}"
     return base
 
 @app.route('/')
@@ -36,7 +37,9 @@ def connect():
             conf.truncate()
             conf.close()
         time.sleep(15)
-        call(["ifdown", "--force", "wlan1"])
+
+        p = Popen(["ifdown --force wlan1"], shell=True)
+        p.wait()
         call(["ifup", "wlan1"])
 
         # call here
