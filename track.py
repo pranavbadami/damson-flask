@@ -90,7 +90,7 @@ def update_bandwidth(current):
             #RESET the data on firewall
             zero_cmd = 'iptables -Z internet -t mangle -m mac --mac-source %s' % user['mac']
             p = subprocess.Popen(zero_cmd, shell=True)
-            
+
 
 
 class BashIP(threading.Thread):
@@ -164,7 +164,7 @@ if __name__ == "__main__":
 
         for rule in remove_rule_user:
             rule_val = remove_rule_user[rule]
-            remove_user(rule_val)
+            remove_rule(rule_val)
         print remove_rule_user, add_rule_user
         #TODO track the current array usage, and transmit to the server. 
         update_bandwidth(current)
