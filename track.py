@@ -49,7 +49,7 @@ def remove_rule(rule):
     print "removed", rule
 
 
-def update_bandwith(current):
+def update_bandwidth(current):
 
     #wait for ok, reset the data. 
     #TODO: Get data used.
@@ -81,7 +81,9 @@ def update_bandwith(current):
                         'hotspot': hotspot, 
                         'user': user
                     }
+        print "request to ", up_payload
         r = requests.post('http://damson.online/api/track', data=up_payload)
+        print "message", r.json()
         if r.json() == 'Transaction successfully logged.':
             print "upload"
             #RESET the data on firewall
@@ -157,7 +159,7 @@ if __name__ == "__main__":
             remove_user(rule)
         print remove_rule_user, add_rule_user
         #TODO track the current array usage, and transmit to the server. 
-        update_bandwith(current)
+        update_bandwidth(current)
 
         time.sleep(2)
 
