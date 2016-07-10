@@ -145,7 +145,7 @@ if __name__ == "__main__":
 
     #loop
     while(1):
-        
+        new = {}
         r = requests.get('http://damson.online/api/wifiusers', params = payload)
         user_list = r.json()
         #GET request for a list of users
